@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}
+ generate story
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h1>Let's Create Your Story</h1>
+  <form action="/generate" method="POST">
+    <label for="character">Main Character's Name:</label>
+    <input type="text" id="character" name="character" placeholder="e.g., Leo the Lion" required autocomplete="off" />
+
+    <label for="theme">Story Theme / Topic:</label>
+    <input type="text" id="theme" name="theme" placeholder="e.g., Magic, Robots, Friendship" required autocomplete="off"/>
+
+    <label for="setting">Story Setting / Place:</label>
+    <input type="text" id="setting" name="setting" placeholder="e.g., A jungle, space station, underwater city" required autocomplete="off" />
+
+    <label for="length">Story Length:</label>
+    <select id="length" name="length" required>
+      <option value="">--Select Length--</option>
+      <option value="short">Short</option>
+      <option value="medium">Medium</option>
+      <option value="long">Long</option>
+    </select>
+
+    <label for="tone">Tone of the Story:</label>
+    <select id="tone" name="tone">
+      <option value="">--Select Tone--</option>
+      <option value="funny">Funny</option>
+      <option value="serious">Serious</option>
+      <option value="mysterious">Mysterious</option>
+      <option value="inspiring">Inspiring</option>
+    </select>
+
+    <button type="submit" class="submitBtn">Generate Story</button>
+  </form>
+</div>
+<script>
+  const generateBtn = document.querySelector('.submitBtn')
+  generateBtn.addEventListener('click',(e)=>{
+    e.target.innerText = 'Generating...';
+  })
+</script>
+{% endblock %}

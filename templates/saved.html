@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Saved Stories
+{% endblock %}
+
+{% block content %}
+  <div class="saved-stories-header">
+    <h1>📚 Your Saved Stories</h1>
+    <div class="search-bar">
+      <input type="text" placeholder="🔍 Search stories by title..." id="searchInput" />
+    </div>
+  </div>
+  <input type="text" value="{{ session['user_id'] }}" hidden id="user_id">
+  <div class="saved-stories-container" id="storyList">
+    {% if saved_stories %}
+        {% for story in saved_stories %}
+        <div class="story-card">
+          <div class="story-title">{{ story['title'] }}</div>
+          <div class="story-snippet">
+            {{ story['shortcut'] }}...
+          </div>
+          <div class="saved-story-actions">
+            <button class="read-btn" data-story-id="{{ story['story_id'] }}" data-title="{{ story['title'] }}" data-full-story="{{ story['story'] }}">Read</button>
+            <a class="delete-btn" id="{{ story['story_id'] }}" href="/delete_saved_story?story_id={{ story['story_id'] }}">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div>
+        You don't have any saved stories for now.
+      </div>
+      <a style="max-width: 300px; margin: 20px auto;" class="own" href="/generate?category"><i data-lucide="wand-sparkles"></i>Generate My Story</a>
+    {% endif %}
+    <div class="story-container read-full-story">
+      <h1 class="story-title">Title</h1>
+      <div class="story-box">
+        <p>
+          Story content will appear here.
+        </p>
+      </div>
+      <div class="close">
+        X
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function get_saved_stories(){
+      fetch('/saved')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('storyList').innerHTML = data;
+        });
+    }
+
+    // Read story functionality
+    const readButtons = document.querySelectorAll('.read-btn');
+    const storyContainer = document.querySelector('.read-full-story');
+    const closeButton = storyContainer.querySelector('.close');
+    
+    readButtons.forEach(function(btn) {
+      btn.addEventListener('click', (e) => {
+        const storyId = e.target.getAttribute('data-story-id');
+        const title = e.target.getAttribute('data-title');
+        const fullStory = e.target.getAttribute('data-full-story');
+
+        // Display the full story in the modal
+        storyContainer.querySelector('.story-title').innerText = title;
+        storyContainer.querySelector('.story-box p').innerText = fullStory;
+
+        // Show the story container
+        storyContainer.style.display = 'block';
+      });
+    });
+
+    closeButton.addEventListener('click', () => {
+      // Hide the story container when 'X' is clicked
+      storyContainer.style.display = 'none';
+    });
+
+    // Handle search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      const stories = document.querySelectorAll('.story-card');
+      
+      stories.forEach(story => {
+        const title = story.querySelector('.story-title').innerText.toLowerCase();
+        if (title.includes(searchTerm)) {
+          story.style.display = 'block';
+        } else {
+          story.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+{% endblock %}

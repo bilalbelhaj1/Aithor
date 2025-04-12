@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+  <link rel="stylesheet" href="../static/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/auth.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li class="logo"><a href="#"><i data-lucide="book-open"></i>Aithor</a></li>
+        <li><a href="/"><i data-lucide="home"></i>Home</a></li>
+        {% if session['user_id'] %}
+          <li><a href="/saved"><i data-lucide="bookmark"></i>Saved Stories</a></li>
+              <li><a href="/logout"><i data-lucide="log-out"></i>Logout</a></li>
+              <li class="profile-dropdown">
+                <a href="#"><i data-lucide="user"></i>{{ session['username'] }}</a></li>
+        {% else %}
+          <li><a href="/register"><i data-lucide="user-plus"></i>Register</a></li>
+          <li><a href="/login"><i data-lucide="log-in"></i>Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    
+    {% block content %}
+    {% endblock %}
+  </div>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

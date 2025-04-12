@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+   generate story
+{% endblock %}
+
+{% block content %}
+<div class="messages">
+  {% with messages = get_flashed_messages(with_categories = True) %}
+  {% if messages %}
+      {% for category, message in messages %}
+          <div class="{{ category }}">
+            {{ message }}
+          </div>
+      {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+  <h1>Generate Your Story</h1>
+  <a class="own" href="/generate?category"><i data-lucide="wand-sparkles"></i>Generate My Story</a>
+  <div class="options">
+    <h2>Would You Like To Generate a Story About:</h2>
+    <a href="/generate?category=Animals"><i data-lucide="dog"></i>Animals</a>
+    <a href="/generate?category=wild"><i data-lucide="paw-print"></i>Wild</a>
+    <a href="/generate?category=technology"><i data-lucide="cpu"></i>Technology</a>
+    <a href="/generate?category=Adventure"><i data-lucide="mountain"></i>Adventure</a>
+    <a href="/generate?category=history"><i data-lucide="library"></i>History</a>
+    <a href="/generate?category=som"><i data-lucide="sparkles"></i>Something Else</a>
+  </div>
+{% endblock %}

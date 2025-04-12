@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ Your Story
+{% endblock %}
+
+{% block content %}
+  <div class="story-header">
+    <h2><a href="/generate?category">← Back</a> Your Generated Story</h2>
+  </div>
+  <input type="text" value="{{ session['user_id'] }}" hidden id="user_id">
+  <div class="story-container">
+    <div class="must-login">
+      <h2>You Must be logged in to save stories</h2>
+      <a href="/login" class="login">Login</a>
+      <a href="/register" class="register"> Create Account</a>
+      <button class="close-must-login">X</button>
+     </div>
+    <h1 class="story-title">{{ story['title'] }}</h1>
+    <div class="story-box">
+      <p>
+        {{ story['story'] }}
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="save-story" id="{{ story['story_id'] }}">Save Story</button>
+
+      <button>Generate Another</button>
+    </div>
+  </div>
+  <script>
+    document.querySelector('.save-story').addEventListener('click', (e)=>{
+      const story_id = e.target.id;
+      const user_id = document.getElementById('user_id').value;
+      fetch(`/save?user_id=${encodeURIComponent(user_id)}&&story_id=${encodeURIComponent(story_id)}`)
+         .then(response => response.text())
+         .then(data =>{
+           if(data === "saved"){
+             const msg = document.createElement('div');
+             msg.classList.add('saved-succes');
+             msg.innerText= 'Your Story Is saved';
+             const box = document.querySelector('.story-box');
+             document.querySelector('.story-container').insertBefore(msg, box);
+             setTimeout(function(){
+               msg.remove();
+             }, 2000)
+           }else{
+             let modal = document.querySelector('.must-login')
+             modal.style.display = 'flex';
+             document.querySelector('.close-must-login').addEventListener('click', ()=>{
+               modal.style.display = 'none';
+             })
+           }
+         })
+    })
+  </script>
+{% endblock %}
